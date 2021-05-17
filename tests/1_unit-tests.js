@@ -57,14 +57,14 @@ suite("Unit Tests", function () {
     });
   });
   suite("convertHandler.getUnit Function", function () {
+    let validInputs = ["10gal", "1L", "3/4mi", "1.2km", "6lbs", "132kg"];
+    let validUnitsKey = ["gal", "L", "mi", "km", "lbs", "kg"];
     test(".getUnit function correctly reads each valid unit", function () {
-      let validUnits = ["10gal", "1L", "3/4mi", "1.2km", "6lbs", "132kg"];
-      let validUnitsKey = ["gal", "L", "mi", "km", "lbs", "kg"];
-      for (let i = 0; i < validUnits.length; i++) {
+      for (let i = 0; i < validInputs.length; i++) {
         assert.equal(
-          convertHandler.getUnit(validUnits[i]),
+          convertHandler.getUnit(validInputs[i]),
           validUnitsKey[i],
-          `incorrectly read the units of ${validUnits[i]}`
+          `incorrectly read the units of ${validInputs[i]}`
         );
       }
     });
@@ -74,6 +74,26 @@ suite("Unit Tests", function () {
         "invalid unit",
         "incorrectly handled an invalid unit"
       );
+    });
+  });
+  suite("convertHandler.spellOutUnit Function", function () {
+    test(".spellOutUnit returns strings for any valid unit", function () {
+      let potentialUnits = ["gal", "L", "mi", "km", "lbs", "kg"];
+      let spellPotentialUnits = [
+        "gallons",
+        "liters",
+        "miles",
+        "kilometers",
+        "pounds",
+        "kilograms",
+      ];
+      for (let i = 0; i < potentialUnits.length; i++) {
+        assert.equal(
+          convertHandler.spellOutUnit(potentialUnits[i]),
+          spellPotentialUnits[i],
+          `incorrectly spelled ${potentialUnits[i]}`
+        );
+      }
     });
   });
 });
