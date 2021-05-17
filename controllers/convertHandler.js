@@ -73,24 +73,24 @@ function ConvertHandler() {
     const miToKm = 1.60934;
     switch (initUnit) {
       case "gal":
-        return initNum * galToL;
+        return parseFloat((initNum * galToL).toFixed(5));
       case "L":
-        return initNum / galToL;
+        return parseFloat((initNum / galToL).toFixed(5));
       case "mi":
-        return initNum * miToKm;
+        return parseFloat((initNum * miToKm).toFixed(5));
       case "km":
-        return initNum / miToKm;
+        return parseFloat((initNum / miToKm).toFixed(5));
       case "lbs":
-        return initNum * lbsToKg;
+        return parseFloat((initNum * lbsToKg).toFixed(5));
       case "kg":
-        return initNum / lbsToKg;
+        return parseFloat((initNum / lbsToKg).toFixed(5));
     }
   };
 
   this.getString = function (initNum, initUnit, returnNum, returnUnit) {
     let spellInitUnit = this.spellOutUnit(initUnit);
     let spellReturnUnit = this.spellOutUnit(returnUnit);
-    let conversionString = `${initNum} ${spellInitUnit} converts to ${returnNum} ${returnUnit}`;
+    let conversionString = `${initNum} ${spellInitUnit} converts to ${returnNum} ${spellReturnUnit}`;
     return conversionString;
   };
 }
