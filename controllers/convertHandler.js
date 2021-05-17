@@ -6,6 +6,8 @@ function ConvertHandler() {
     let initUnit = input.match(this.inputRegex)[2];
     if (!!initNumber && !!initUnit) {
       return eval(initNumber);
+    } else if (initNumber === "" && initUnit) {
+      return 1;
     } else {
       return "invalid number";
     }

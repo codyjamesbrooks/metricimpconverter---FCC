@@ -21,23 +21,26 @@ suite("Unit Tests", function () {
       );
     });
 
-    let randomNumerator = Math.floor(Math.random() * 10);
-    let randomDenomator = Math.floor(Math.random() * 10 + 1);
-
-    let randomFraction = randomNumerator + "/" + randomDenomator;
+    let randomNumerator = Math.random() * 10;
+    let randomDenomator = Math.random() * 10 + 1;
+    let randomFraction =
+      Math.floor(randomNumerator) + "/" + Math.floor(randomDenomator);
+    let randomFloatFraction = randomNumerator + "/" + randomDenomator;
     let randomDoubleFraction =
-      randomFraction + "/" + Math.floor(Math.random() * 10 + 1);
+      randomFraction + "/" + Math.floor(Math.random() * 10);
 
-    test(".getNum function reads a fractional number", function () {
-      assert.equal(
-        convertHandler.getNum("1/2gal"),
-        0.5,
-        "Incorrectly reads fractional input no space"
-      );
+    test(".getNum function reads a random fractional input", function () {
       assert.equal(
         convertHandler.getNum(randomFraction + "units"),
+        Math.floor(randomNumerator) / Math.floor(randomDenomator),
+        "Incorrectly reads fractional input"
+      );
+    });
+    test(".getNum function correctly reads fraction with decimal", function () {
+      assert.equal(
+        convertHandler.getNum(randomFloatFraction + "units"),
         randomNumerator / randomDenomator,
-        "Incorrectly read random fractional unit " + randomFraction
+        `Incorrectly reads fraction with decimals ${randomFloatFraction}`
       );
     });
     test(".getNum function returns an error on double fraction", function () {
@@ -45,6 +48,13 @@ suite("Unit Tests", function () {
         convertHandler.getNum(randomDoubleFraction + "units"),
         "invalid number",
         `failed to return error on random double fraction ${randomDoubleFraction}`
+      );
+    });
+    test(".getNum returns 1 when no  numerical input", function () {
+      assert.equal(
+        convertHandler.getNum("units"),
+        1,
+        "incorrectly defaults to a value of 1 when no numeric input"
       );
     });
   });
