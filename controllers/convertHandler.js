@@ -1,9 +1,14 @@
 function ConvertHandler() {
-  this.inputRegex = /^(\d*\.?\d*\/?\d*\.?\d*)[ ]*(\w*)?/;
+  this.inputRegex = /^(\d*\.?\d*\/?\d*\.?\d*)(\w*)?/;
 
   this.getNum = function (input) {
-    let result = input.match(this.inputRegex)[1];
-    return eval(result);
+    let initNumber = input.match(this.inputRegex)[1];
+    let initUnit = input.match(this.inputRegex)[2];
+    if (!!initNumber && !!initUnit) {
+      return eval(initNumber);
+    } else {
+      return "invalid number";
+    }
   };
 
   this.getUnit = function (input) {

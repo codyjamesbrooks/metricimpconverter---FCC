@@ -13,11 +13,6 @@ suite("Unit Tests", function () {
         1,
         "Incorrectly read whole number, 1 digit no space"
       );
-      assert.equal(
-        convertHandler.getNum("20 lbs"),
-        20,
-        "Incorrectly read whole number, 2 digit 1 space"
-      );
     });
 
     // convertHandler should correctly read a decimal number input.
@@ -27,27 +22,17 @@ suite("Unit Tests", function () {
         1.1,
         "Incorrectly reads decimal format no space"
       );
-      assert.equal(
-        convertHandler.getNum(".1 L"),
-        0.1,
-        "Incorrectly reads decimal format 1 space"
-      );
     });
 
     let randomNumerator = Math.floor(Math.random() * 10);
     let randomDenomator = Math.floor(Math.random() * 10 + 1);
-    let randomFractionInput = randomNumerator + "/" + randomDenomator + " unit";
+    let randomFractionInput = randomNumerator + "/" + randomDenomator + "unit";
     // convertHandler should correctly read a fractional input.
     test(".getNum function reads a fractional number", function () {
       assert.equal(
         convertHandler.getNum("1/2gal"),
         0.5,
         "Incorrectly reads fractional input no space"
-      );
-      assert.equal(
-        convertHandler.getNum("3/4 miles"),
-        0.75,
-        "Incorrectly reads fractional input 1 space"
       );
       assert.equal(
         convertHandler.getNum(randomFractionInput),
@@ -94,6 +79,50 @@ suite("Unit Tests", function () {
           `incorrectly spelled ${potentialUnits[i]}`
         );
       }
+    });
+  });
+  suite("convertHandler.getReturnUnit Function", function () {
+    test(".getReturnUnit converts gal to L", function () {
+      assert.equal(
+        convertHandler.getReturnUnit("gal"),
+        "L",
+        "falid to convert gal to L"
+      );
+    });
+    test(".getReturnUnit converts L to gal", function () {
+      assert.equal(
+        convertHandler.getReturnUnit("L"),
+        "gal",
+        "falied to convert L to gal"
+      );
+    });
+    test(".getReturnUnit converts mi to km", function () {
+      assert.equal(
+        convertHandler.getReturnUnit("mi"),
+        "km",
+        "failed to convert mi to km"
+      );
+    });
+    test(".getReturnUnit converts km to mi", function () {
+      assert.equal(
+        convertHandler.getReturnUnit("km"),
+        "mi",
+        "failed to convert km to mi"
+      );
+    });
+    test(".getReturnUnit converts lbs to kg", function () {
+      assert.equal(
+        convertHandler.getReturnUnit("lbs"),
+        "kg",
+        "falied to convert lbs to kg"
+      );
+    });
+    test(".getReturnUnit converts kg to lbs", function () {
+      assert.equal(
+        convertHandler.getReturnUnit("kg"),
+        "lbs",
+        "failed to convert kg to lbs"
+      );
     });
   });
 });
