@@ -6,6 +6,12 @@ const ConvertHandler = require("../controllers/convertHandler.js");
 module.exports = function (app) {
   let convertHandler = new ConvertHandler();
   app.route("/api/convert").get((req, res) => {
-    res.json({ initNum: convertHandler.getNum(req.query.input) });
+    res.json({
+      initNum: convertHandler.getNum(req.query.input),
+      initUnit: convertHandler.getUnit(req.query.input),
+      returnUnit: convertHandler.getReturnUnit(
+        convertHandler.getUnit(req.query.input)
+      ),
+    });
   });
 };
