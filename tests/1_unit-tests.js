@@ -6,28 +6,28 @@ let convertHandler = new ConvertHandler();
 
 suite("Unit Tests", function () {
   suite("convertHandler.getNum Function", function () {
-    // convertHandler should correctly read a whole number input.
     test(".getNum function reads a whole number", function () {
       assert.equal(
         convertHandler.getNum("1km"),
         1,
-        "Incorrectly read whole number, 1 digit no space"
+        "Incorrectly read whole number"
       );
     });
-
-    // convertHandler should correctly read a decimal number input.
     test(".getNum function reads a decimal number", function () {
       assert.equal(
-        convertHandler.getNum("1.1miles"),
+        convertHandler.getNum("1.1mi"),
         1.1,
-        "Incorrectly reads decimal format no space"
+        "Incorrectly reads decimal format"
       );
     });
 
     let randomNumerator = Math.floor(Math.random() * 10);
     let randomDenomator = Math.floor(Math.random() * 10 + 1);
-    let randomFractionInput = randomNumerator + "/" + randomDenomator + "unit";
-    // convertHandler should correctly read a fractional input.
+
+    let randomFraction = randomNumerator + "/" + randomDenomator;
+    let randomDoubleFraction =
+      randomFraction + "/" + Math.floor(Math.random() * 10 + 1);
+
     test(".getNum function reads a fractional number", function () {
       assert.equal(
         convertHandler.getNum("1/2gal"),
@@ -35,9 +35,16 @@ suite("Unit Tests", function () {
         "Incorrectly reads fractional input no space"
       );
       assert.equal(
-        convertHandler.getNum(randomFractionInput),
+        convertHandler.getNum(randomFraction + "units"),
         randomNumerator / randomDenomator,
-        "Incorrectly read random fractional unit " + randomFractionInput
+        "Incorrectly read random fractional unit " + randomFraction
+      );
+    });
+    test(".getNum function returns an error on double fraction", function () {
+      assert.equal(
+        convertHandler.getNum(randomDoubleFraction + "units"),
+        "invalid number",
+        `failed to return error on random double fraction ${randomDoubleFraction}`
       );
     });
   });
