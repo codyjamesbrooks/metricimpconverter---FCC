@@ -5,7 +5,7 @@ const ConvertHandler = require("../controllers/convertHandler.js");
 let convertHandler = new ConvertHandler();
 
 suite("Unit Tests", function () {
-  suite("convertHandler Functions", function () {
+  suite("convertHandler.getNum Function", function () {
     // convertHandler should correctly read a whole number input.
     test(".getNum function reads a whole number", function () {
       assert.equal(
@@ -53,6 +53,26 @@ suite("Unit Tests", function () {
         convertHandler.getNum(randomFractionInput),
         randomNumerator / randomDenomator,
         "Incorrectly read random fractional unit " + randomFractionInput
+      );
+    });
+  });
+  suite("convertHandler.getUnit Function", function () {
+    test(".getUnit function correctly reads each valid unit", function () {
+      let validUnits = ["10gal", "1L", "3/4mi", "1.2km", "6lbs", "132kg"];
+      let validUnitsKey = ["gal", "L", "mi", "km", "lbs", "kg"];
+      for (let i = 0; i < validUnits.length; i++) {
+        assert.equal(
+          convertHandler.getUnit(validUnits[i]),
+          validUnitsKey[i],
+          `incorrectly read the units of ${validUnits[i]}`
+        );
+      }
+    });
+    test(".getUnit function returns a error for an invalid input", function () {
+      assert.equal(
+        convertHandler.getUnit("3tbs"),
+        "invalid unit",
+        "incorrectly handled an invalid unit"
       );
     });
   });
