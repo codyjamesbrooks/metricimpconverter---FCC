@@ -21,7 +21,7 @@ suite("Unit Tests", function () {
       );
     });
 
-    let randomNumerator = Math.random() * 10;
+    let randomNumerator = Math.random() * 10 + 1;
     let randomDenomator = Math.random() * 10 + 1;
     let randomFraction =
       Math.floor(randomNumerator) + "/" + Math.floor(randomDenomator);

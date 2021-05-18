@@ -6,9 +6,6 @@ const server = require("../server");
 chai.use(chaiHttp);
 
 suite("Functional Tests", function () {
-  // Convert an invalid number such as 3/7.2/4kg: GET request to /api/convert.
-  // Convert an invalid number AND unit such as 3/7.2/4kilomegagram: GET request to /api/convert.
-  // Convert with no number such as kg: GET request to /api/convert.
   suite("Test correct response of valid input to api/convert", function () {
     test("correct response to valid whole number input", function (done) {
       chai
@@ -81,7 +78,6 @@ suite("Functional Tests", function () {
         });
     });
   });
-  // Convert an invalid number such as 3/7.2/4kg: GET request to /api/convert.
   suite("Test response of an invalid number to /api/convert", function () {
     test("invalid number response if number has more than one fraction", function (done) {
       chai
@@ -112,4 +108,82 @@ suite("Functional Tests", function () {
         });
     });
   });
+  suite(
+    "Test response of both an invalid number and invalid unit to /api/convert",
+    function () {
+      test("multiple fraction and unknow unit", function (done) {
+        chai
+          .request(server)
+          .get("/api/convert?input=3/7.2/4kilomegagram")
+          .end(function (err, res) {
+            assert.equal(res.status, 200, "incorrect server res");
+            assert.equal(
+              res.text,
+              "invalid number and unit",
+              "incorrect response to invalid number and invalid unit"
+            );
+            done();
+          });
+      });
+      test("negative number and invalid unit", function (done) {
+        chai
+          .request(server)
+          .get("/api/convert?input=-65flyingfarts")
+          .end(function (err, res) {
+            assert.equal(res.status, 200, "incorrect server res");
+            assert.equal(
+              res.text,
+              "invalid number and unit",
+              "incorrect response to invalid number and invalid unit"
+            );
+            done();
+          });
+      });
+    }
+  );
+  suite(
+    "Test response when no number is provided to /api/convert",
+    function () {
+      test("no number with valid unit", function (done) {
+        chai
+          .request(server)
+          .get("/api/convert?input=kg")
+          .end(function (err, res) {
+            assert.equal(res.status, 200, "incorrect server res");
+            assert.equal(
+              res.body.initNum,
+              1,
+              "failed to default to 1 on missing number input"
+            );
+            assert.equal(
+              res.body.initUnit,
+              "kg",
+              "incorrectly read input unit"
+            );
+            assert.equal(res.body.returnNum, 2.20462, "incorrect convert");
+            assert.equal(res.body.returnUnit, "lbs", "incorrect return unit");
+            assert.equal(
+              res.body.string,
+              "1 kilograms converts to 2.20462 pounds",
+              "incorrect string response"
+            );
+            done();
+          });
+      });
+      test("no number with invalid unit", function (done) {
+        chai
+          .request(server)
+          .get("/api/convert?input=holycows")
+          .end(function (err, res) {
+            assert.equal(res.status, 200, "incorrect server res");
+            assert.equal(
+              res.text,
+              "invalid unit",
+              "falid to register incorrect unit"
+            );
+            done();
+          });
+      });
+    }
+  );
 });
