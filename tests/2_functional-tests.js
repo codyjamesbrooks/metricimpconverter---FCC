@@ -6,12 +6,11 @@ const server = require("../server");
 chai.use(chaiHttp);
 
 suite("Functional Tests", function () {
-  // Convert an invalid input such as 32g: GET request to /api/convert.
   // Convert an invalid number such as 3/7.2/4kg: GET request to /api/convert.
   // Convert an invalid number AND unit such as 3/7.2/4kilomegagram: GET request to /api/convert.
   // Convert with no number such as kg: GET request to /api/convert.
-  suite("Test Correct response of valid input to api/convert", function () {
-    test("valid whole number input", function (done) {
+  suite("Test correct response of valid input to api/convert", function () {
+    test("correct response to valid whole number input", function (done) {
       chai
         .request(server)
         .get("/api/convert?input=4gal")
@@ -29,7 +28,7 @@ suite("Functional Tests", function () {
           done();
         });
     });
-    test("valid fraction input", function () {
+    test("correct response to valid fraction input", function (done) {
       chai
         .request(server)
         .get("/api/convert?input=1/2km")
@@ -44,29 +43,73 @@ suite("Functional Tests", function () {
             "0.5 kilometers converts to 0.31069 miles",
             "incorrect string response"
           );
+          done();
+        });
+    });
+    test("correct response to valid decimal input", function (done) {
+      chai
+        .request(server)
+        .get("/api/convert?input=5.4/3lbs")
+        .end(function (err, res) {
+          assert.equal(res.status, 200, "incorrect server res");
+          assert.equal(res.body.initNum, 1.8, "incorrect initNum read");
+          assert.equal(res.body.initUnit, "lbs", "incorrect initUnit read");
+          assert.equal(res.body.returnNum, 0.81647, "incorrect conversion");
+          assert.equal(res.body.returnUnit, "kg", "incorrect return unit");
+          assert.equal(
+            res.body.string,
+            "1.8 pounds converts to 0.81647 kilograms",
+            "incorrect string response"
+          );
+          done();
         });
     });
   });
-
-  // const chai = require("chai");
-  // const assert = chai.assert;
-
-  // const server = require("../server");
-
-  // const chaiHttp = require("chai-http");
-  // chai.use(chaiHttp);
-
-  // suite("Functional Tests", function () {
-  //   suite("Integration tests with chai-http", function () {
-  //     // #1
-  //     test("Test GET /hello with no name", function (done) {
-  //       chai
-  //         .request(server)
-  //         .get("/hello")
-  //         .end(function (err, res) {
-  //           assert.equal(res.status, 200);
-  //           assert.equal(res.text, "hello Guest");
-  //           done();
-  //         });
-  //     });
+  suite("Test response of an invalid unit to api/convert", function () {
+    test("invalid unit response if unit isn't recognized", function (done) {
+      chai
+        .request(server)
+        .get("/api/convert?input=32g")
+        .end(function (err, res) {
+          assert.equal(res.status, 200, "incorrect server res");
+          assert.equal(
+            res.text,
+            "invalid unit",
+            "incorrect res to unrecognized unit"
+          );
+          done();
+        });
+    });
+  });
+  // Convert an invalid number such as 3/7.2/4kg: GET request to /api/convert.
+  suite("Test response of an invalid number to /api/convert", function () {
+    test("invalid number response if number has more than one fraction", function (done) {
+      chai
+        .request(server)
+        .get("/api/convert?input=3/7.2/4kg")
+        .end(function (err, res) {
+          assert.equal(res.status, 200, "incorrect server res");
+          assert.equal(
+            res.text,
+            "invalid number",
+            "incorrect res to invalid number"
+          );
+          done();
+        });
+    });
+    test("invalid number response if number is less than 0", function (done) {
+      chai
+        .request(server)
+        .get("/api/convert?input=-5gal")
+        .end(function (err, res) {
+          assert.equal(res.status, 200, "incorrect server res");
+          assert.equal(
+            res.text,
+            "invalid number",
+            "incorrect respose to negative number"
+          );
+          done();
+        });
+    });
+  });
 });

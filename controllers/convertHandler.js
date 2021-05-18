@@ -1,21 +1,20 @@
 function ConvertHandler() {
-  this.inputRegex = /^(\d*\.?\d*\/?\d*\.?\d*)(\w*)?/;
-
   this.getNum = function (input) {
-    let initNumber = input.match(this.inputRegex)[1];
-    let initUnit = input.match(this.inputRegex)[2];
-    if (!!initNumber && !!initUnit) {
-      return eval(initNumber);
-    } else if (initNumber === "" && initUnit) {
-      return 1;
-    } else {
-      return "invalid number";
-    }
+    let endOfNumber = input.search(/[a-zA-Z]/);
+    let initNumber = input.slice(0, endOfNumber);
+    if (initNumber === "") return 1;
+    if (initNumber.split("/").length > 2) return "invalid number";
+
+    initNumber = eval(initNumber);
+    if (initNumber > 0) return initNumber;
+    else return "invalid number";
   };
 
   this.getUnit = function (input) {
-    let initUnit = input.match(this.inputRegex)[2].toLowerCase();
-    switch (initUnit) {
+    let startOfUnit = input.search(/[a-zA-Z]/);
+    let initUnit = input.slice(startOfUnit);
+    if (initUnit === "") return "invalid unit";
+    switch (initUnit.toLowerCase()) {
       case "gal":
         return "gal";
       case "l":
